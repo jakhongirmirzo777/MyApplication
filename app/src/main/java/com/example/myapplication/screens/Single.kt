@@ -47,6 +47,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.data.entities.ProductAddResponse
+import com.example.myapplication.data.entities.ProductDeleteResponse
 
 @Composable
 fun SingleScreen(navController: NavHostController) {
@@ -208,7 +210,7 @@ fun SingleScreen(navController: NavHostController) {
                         ) {
                             OutlinedButton(
                                 onClick = {
-
+                                    makeDeleteRequest(product!!.id.toString(), navController)
                                 },
                                 modifier = Modifier
                                     .height(40.dp)
@@ -243,4 +245,22 @@ fun SingleScreen(navController: NavHostController) {
             }
         }
     }
+}
+
+fun makeDeleteRequest(productId: String, navController: NavHostController) {
+    val call = apiService.deleteRecord(productId)
+    call.enqueue(object : Callback<ProductDeleteResponse> {
+        override fun onResponse(
+            call: Call<ProductDeleteResponse>,
+            response: Response<ProductDeleteResponse>
+        ) {
+            if (response.isSuccessful) {
+                navController.navigate("main")
+            }
+        }
+
+        override fun onFailure(call: Call<ProductDeleteResponse>, t: Throwable) {
+
+        }
+    })
 }

@@ -43,7 +43,6 @@ import com.example.myapplication.data.entities.ProductAddResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.util.Log
 import androidx.compose.runtime.derivedStateOf
 
 @Composable
@@ -118,7 +117,6 @@ fun AddScreen(navController: NavHostController) {
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }
-
             OutlinedTextField(
                 label = { Text("Product name") },
                 value = firstInput,
@@ -334,7 +332,6 @@ fun InputChipExample(
 }
 
 fun makePostRequest(bodyAdd: ProductAdd, navController: NavHostController) {
-    Log.d("MyTag", bodyAdd.toString())
     val call = apiService.postData(bodyAdd)
     call.enqueue(object : Callback<ProductAddResponse> {
         override fun onResponse(
