@@ -7,6 +7,7 @@ data class TextItem (
 )
 
 data class Product(
+    val id: Number,
     val title: String,
     val description: String,
     val url: String,
@@ -14,4 +15,5 @@ data class Product(
     val price: Number,
     val type: String,
     val text_list: List<TextItem>
-)
+) {
+}

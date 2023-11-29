@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -30,8 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -39,6 +35,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.screens.AddScreen
 import com.example.myapplication.screens.MainScreen
+import com.example.myapplication.screens.SingleScreen
+import androidx.navigation.NavBackStackEntry
 
 data class BottomNavigationItem(
     val title: String,
@@ -136,15 +134,18 @@ fun NavigationBar(){
             navController = navController,
             startDestination = "main",
             modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(bottom = 100.dp)
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(bottom = 100.dp)
         ) {
             composable("main") {
-                MainScreen()
+                MainScreen(navController = navController )
             }
             composable("add") {
                 AddScreen(navController = navController )
+            }
+            composable("single/{productId}") {
+                SingleScreen(navController = navController)
             }
         }
     }

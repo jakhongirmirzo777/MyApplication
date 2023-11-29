@@ -21,8 +21,6 @@ class ProductsViewModel : ViewModel() {
     val products = MutableStateFlow<List<Product>>(emptyList())
 
     private fun loadData() {
-        Log.d("jprq", "load data invoked")
-
         scope.launch {
             withContext(Dispatchers.IO) {
                 val records = apiService.getRecords()

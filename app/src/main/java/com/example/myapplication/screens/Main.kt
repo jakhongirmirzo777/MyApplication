@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,13 +23,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.example.myapplication.data.entities.Product
 import com.example.myapplication.viewmodel.ProductsViewModel
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(viewModel: ProductsViewModel = androidx.lifecycle.viewmodel.compose.viewModel()){
+fun MainScreen(navController: NavHostController, viewModel: ProductsViewModel = androidx.lifecycle.viewmodel.compose.viewModel()){
 
     val recordsC = viewModel.products.collectAsState()
 
@@ -42,7 +43,10 @@ fun MainScreen(viewModel: ProductsViewModel = androidx.lifecycle.viewmodel.compo
                 modifier = Modifier
                     .height(250.dp)
                     .padding(8.dp)
-                    .background(Color.White)
+                    .background(Color.White),
+                onClick = {
+                    navController.navigate("single/${product.id}")
+                }
             ){
                 Image(
                     painter = rememberImagePainter(product.url),
