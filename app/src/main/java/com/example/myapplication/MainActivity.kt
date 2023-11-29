@@ -144,7 +144,7 @@ fun NavigationBar(){
                 MainScreen()
             }
             composable("add") {
-                AddScreen()
+                AddScreen(navController = navController )
             }
         }
     }
