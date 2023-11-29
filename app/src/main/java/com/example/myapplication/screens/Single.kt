@@ -226,7 +226,7 @@ fun SingleScreen(navController: NavHostController) {
                             }
                             OutlinedButton(
                                 onClick = {
-
+                                    navController.navigate("edit/${product!!.id}")
                                 },
                                 modifier = Modifier
                                     .height(40.dp)

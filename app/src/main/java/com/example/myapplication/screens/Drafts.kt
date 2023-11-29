@@ -1,0 +1,133 @@
+package com.example.myapplication.screens
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
+import com.example.myapplication.data.apiService
+import com.example.myapplication.data.entities.ProductDeleteResponse
+import com.example.myapplication.viewmodel.ProductsViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DraftsScreen(
+    navController: NavHostController,
+    viewModel: ProductsViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
+
+    val recordsC = viewModel.products.collectAsState()
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2)
+    ) {
+        items(recordsC.value) { product ->
+            OutlinedCard(
+                border = BorderStroke(1.dp, Color(android.graphics.Color.parseColor("#D7D7D7"))),
+                modifier = Modifier
+                    .height(280.dp)
+                    .padding(8.dp)
+                    .background(Color.White),
+                onClick = {
+                    navController.navigate("single/${product.id}")
+                }
+            ) {
+                Image(
+                    painter = rememberImagePainter(product.url),
+                    contentDescription = product.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .height(160.dp)
+                        .fillMaxWidth()
+                        .background(Color.White)
+                )
+                Column(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxSize()
+                        .background(Color.White)
+
+                ) {
+                    Text(
+                        product.title,
+                        fontSize = 8.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = Color(android.graphics.Color.parseColor("#1D1B20"))
+                    )
+                    Text(
+                        "Vegetable family: ${product.type}",
+                        fontSize = 7.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = Color(android.graphics.Color.parseColor("#49454F"))
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        product.description,
+                        fontSize = 7.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = Color(android.graphics.Color.parseColor("#49454F"))
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    OutlinedButton(
+                        onClick = {
+                            makeDeleteRequestDraft(product.id.toString(), navController)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Delete",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color(android.graphics.Color.parseColor("#FF005C")),
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun makeDeleteRequestDraft(productId: String, navController: NavHostController) {
+    val call = apiService.deleteRecord(productId)
+    call.enqueue(object : Callback<ProductDeleteResponse> {
+        override fun onResponse(
+            call: Call<ProductDeleteResponse>,
+            response: Response<ProductDeleteResponse>
+        ) {
+            if (response.isSuccessful) {
+                navController.navigate("main")
+            }
+        }
+
+        override fun onFailure(call: Call<ProductDeleteResponse>, t: Throwable) {
+
+        }
+    })
+}

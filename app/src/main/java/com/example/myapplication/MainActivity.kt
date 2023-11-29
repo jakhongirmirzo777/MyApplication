@@ -37,6 +37,8 @@ import com.example.myapplication.screens.AddScreen
 import com.example.myapplication.screens.MainScreen
 import com.example.myapplication.screens.SingleScreen
 import androidx.navigation.NavBackStackEntry
+import com.example.myapplication.screens.DraftsScreen
+import com.example.myapplication.screens.EditScreen
 
 data class BottomNavigationItem(
     val title: String,
@@ -71,7 +73,7 @@ fun NavigationBar(){
             title = "Drafts",
             selectedIcon = Icons.Filled.ShoppingCart,
             unselectedIcon = Icons.Outlined.ShoppingCart,
-            path = "main"
+            path = "drafts"
         ),
         BottomNavigationItem(
             title = "Add",
@@ -141,11 +143,17 @@ fun NavigationBar(){
             composable("main") {
                 MainScreen(navController = navController )
             }
+            composable("drafts") {
+                DraftsScreen(navController = navController )
+            }
             composable("add") {
                 AddScreen(navController = navController )
             }
             composable("single/{productId}") {
                 SingleScreen(navController = navController)
+            }
+            composable("edit/{productId}") {
+                EditScreen(navController = navController)
             }
         }
     }
